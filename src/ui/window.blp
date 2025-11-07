@@ -1,0 +1,219 @@
+using Gtk 4.0;
+using Adw 1;
+
+Adw.ApplicationWindow main_window {
+  overflow: visible;
+  title: "Tic Tac Toe";
+
+  content: Adw.ToolbarView {
+    [top]
+    // ==============================
+    // Header Bar
+    // ==============================
+    Adw.HeaderBar {
+      title-widget: Adw.WindowTitle {
+        title: "Tic Tac Toe";
+      };
+
+      [end]
+      MenuButton button_menu {
+        primary: true;
+        icon-name: "open-menu-symbolic";
+
+        menu-model: menu menu_app {
+          section {
+            item {
+              label: _("Keyboard Shortcuts");
+              action: "app.shortcuts";
+            }
+
+            item {
+              label: _("About My App");
+              action: "app.about";
+            }
+          }
+        };
+      }
+
+      [start]
+      Gtk.Button reset_btn {
+        label: _("Reset");
+        // clicked => $on_button_clicked();
+      }
+    }
+
+    // ===================================
+    // Body
+    // ===================================
+    Gtk.Box {
+      spacing: 30;
+      halign: center;
+      valign: center;
+      orientation: vertical;
+
+      css-classes: [
+        "body",
+      ];
+
+      Gtk.Box inner_body {
+        spacing: 50;
+        orientation: horizontal;
+        // =====================
+        //
+        // =====================
+        Gtk.Box player_display {
+          spacing: 10;
+          name: "player";
+          valign: center;
+          orientation: vertical;
+
+          Gtk.Overlay {
+            overflow: visible;
+            name: "player-overlay";
+
+            child: Gtk.Box {
+              spacing: 5;
+              width-request: 100;
+              height-request: 100;
+              orientation: vertical;
+              name: "player-label-box";
+
+              Gtk.Label {
+                valign: end;
+                vexpand: true;
+                halign: center;
+                label: _("You");
+                name: "player-label";
+              }
+
+              Gtk.Picture {
+                halign: center;
+                width-request: 50;
+                height-request: 25;
+                name: "player-shape";
+                content-fit: contain;
+                file: "assets/icons/x.png";
+              }
+            };
+
+            [overlay]
+            Gtk.Picture {
+              valign: end;
+              halign: center;
+              width-request: 60;
+              margin-bottom: 70;
+              height-request: 60;
+              name: "player-profile";
+            }
+          }
+
+          // ========================
+          Gtk.Box {
+            name: "win-indicator";
+            orientation: horizontal;
+
+            Gtk.Label {
+              label: _("Win Rounds: ");
+              name: "win-indicator-label";
+            }
+
+            Gtk.Label {
+              label: _("0");
+              name: "win-indicator-numb";
+            }
+          }
+        }
+
+        // =====================
+        //
+        // =====================
+        Gtk.Grid box_frame {
+          width-request: 400;
+          height-request: 400;
+          row-homogeneous: true;
+          column-homogeneous: true;
+
+          css-classes: [
+            "box-frame",
+          ];
+        }
+
+        // =====================
+        //
+        // =====================
+        Gtk.Box bot_display {
+          spacing: 10;
+          name: "bot";
+          valign: center;
+          orientation: vertical;
+
+          Gtk.Overlay {
+            overflow: visible;
+            name: "bot-overlay";
+
+            child: Gtk.Box {
+              spacing: 5;
+              width-request: 100;
+              height-request: 100;
+              orientation: vertical;
+              name: "bot-label-box";
+
+              Gtk.Label {
+                valign: end;
+                vexpand: true;
+                halign: center;
+                label: _("Bot");
+                name: "bot-label";
+              }
+
+              Gtk.Picture {
+                halign: center;
+                width-request: 50;
+                height-request: 25;
+                name: "bot-shape";
+                content-fit: contain;
+                file: "assets/icons/x.png";
+              }
+            };
+
+            [overlay]
+            Gtk.Picture {
+              valign: end;
+              halign: center;
+              width-request: 60;
+              margin-bottom: 70;
+              height-request: 60;
+              name: "bot-profile";
+            }
+          }
+
+          // ====================
+          Gtk.Box {
+            name: "win-indicator";
+            orientation: horizontal;
+
+            Gtk.Label {
+              label: _("Win Rounds: ");
+              name: "win-indicator-label";
+            }
+
+            Gtk.Label {
+              label: _("0");
+              name: "win-indicator-numb";
+            }
+          }
+        }
+      }
+
+      Gtk.Label {
+        halign: center;
+        width-request: 100;
+        label: _("Your Turn");
+
+        css-classes: [
+          "signifier",
+        ];
+      }
+    }
+  };
+}

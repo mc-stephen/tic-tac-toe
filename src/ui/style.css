@@ -1,0 +1,121 @@
+:root {
+  --x_o_thickness: 3px;
+  --main-color: #1e1e2f;
+  --widget-color: #3a3a5a;
+  --secondary-color: #4b4b6b;
+}
+
+window {
+  background-color: var(--main-color);
+}
+
+.body {
+  padding: 50px;
+}
+
+/*====================*/
+/* Grid cells */
+/*====================*/
+.single {
+  background: var(--secondary-color);
+}
+.single.cell-00 {
+  border-radius: 10px 0 0 0;
+  border-right: var(--x_o_thickness) solid var(--main-color);
+  border-bottom: var(--x_o_thickness) solid var(--main-color);
+}
+.single.cell-01 {
+  border-bottom: var(--x_o_thickness) solid var(--main-color);
+}
+.single.cell-02 {
+  border-radius: 0 10px 0 0;
+  border-left: var(--x_o_thickness) solid var(--main-color);
+  border-bottom: var(--x_o_thickness) solid var(--main-color);
+}
+.single.cell-10 {
+  border-right: var(--x_o_thickness) solid var(--main-color);
+}
+.single.cell-12 {
+  border-left: var(--x_o_thickness) solid var(--main-color);
+}
+.single.cell-20 {
+  border-radius: 0 0 0 10px;
+  border-top: var(--x_o_thickness) solid var(--main-color);
+  border-right: var(--x_o_thickness) solid var(--main-color);
+}
+.single.cell-21 {
+  border-top: var(--x_o_thickness) solid var(--main-color);
+}
+.single.cell-22 {
+  border-radius: 0 0 10px 0;
+  border-top: var(--x_o_thickness) solid var(--main-color);
+  border-left: var(--x_o_thickness) solid var(--main-color);
+}
+label.signifier {
+  padding: 10px;
+  border-radius: 50px;
+  border: 1px solid var(--widget-color);
+  background-color: var(--secondary-color);
+}
+
+/*====================*/
+/* Global Selector */
+/*====================*/
+button {
+  color: #eee;
+  border-radius: 8px;
+  background-color: var(--widget-color);
+}
+
+button:hover {
+  background-color: var(--secondary-color);
+}
+
+label.title {
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/*====================*/
+/* Players (Bot Included) */
+/*====================*/
+picture#bot-profile,
+picture#player-profile {
+  border-radius: 100px;
+  background: var(--secondary-color);
+  border: 2px solid var(--main-color);
+}
+
+box#bot-label-box,
+box#player-label-box {
+  padding: 8px;
+  border-radius: 30px;
+  background: var(--widget-color);
+  border: 2px solid var(--secondary-color);
+}
+
+label#bot-label,
+label#player-label {
+  font-size: 17px;
+  font-weight: bold;
+}
+
+picture#bot-shape,
+picture#player-shape {
+  padding: 10px;
+  border-radius: 50px;
+  background: var(--main-color);
+}
+
+box#win-indicator,
+box#win-indicator {
+  padding: 5px 10px;
+  border-radius: 50px;
+  border: 1px solid var(--secondary-color);
+}
+
+label#win-indicator-label {
+  font-size: 13px;
+  font-weight: bold;
+}
