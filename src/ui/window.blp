@@ -86,18 +86,20 @@ Adw.ApplicationWindow main_window {
                 name: "player-label";
               }
 
-              Gtk.Picture {
+              Gtk.Box {
                 halign: center;
-                width-request: 50;
-                height-request: 25;
+                valign: center;
                 name: "player-shape";
-                content-fit: contain;
-                file: "assets/icons/x.png";
+
+                Gtk.Image player {
+                  hexpand: true;
+                  halign: center;
+                }
               }
             };
 
             [overlay]
-            Gtk.Picture {
+            Gtk.Picture player-profile {
               valign: end;
               halign: center;
               width-request: 60;
@@ -117,7 +119,7 @@ Adw.ApplicationWindow main_window {
               name: "win-indicator-label";
             }
 
-            Gtk.Label {
+            Gtk.Label player-win-round {
               label: _("0");
               name: "win-indicator-numb";
             }
@@ -166,18 +168,28 @@ Adw.ApplicationWindow main_window {
                 name: "bot-label";
               }
 
-              Gtk.Picture {
+              Gtk.Box {
                 halign: center;
-                width-request: 50;
-                height-request: 25;
-                name: "bot-shape";
-                content-fit: contain;
-                file: "assets/icons/x.png";
+                valign: center;
+                name: "player-shape";
+
+                Gtk.Image bot {
+                  hexpand: true;
+                  halign: center;
+                }
               }
+
+              // Gtk.Picture bot {
+              //   halign: center;
+              //   can-shrink: true;
+              //   name: "bot-shape";
+              //   content-fit: contain;
+              //   alternative-text: _("x/o");
+              // }
             };
 
             [overlay]
-            Gtk.Picture {
+            Gtk.Picture bot-profile {
               valign: end;
               halign: center;
               width-request: 60;
@@ -197,7 +209,7 @@ Adw.ApplicationWindow main_window {
               name: "win-indicator-label";
             }
 
-            Gtk.Label {
+            Gtk.Label bot-win-round {
               label: _("0");
               name: "win-indicator-numb";
             }
@@ -205,10 +217,10 @@ Adw.ApplicationWindow main_window {
         }
       }
 
-      Gtk.Label {
+      Gtk.Label turn-indicator {
+        opacity: .6;
         halign: center;
         width-request: 100;
-        label: _("Your Turn");
 
         css-classes: [
           "signifier",

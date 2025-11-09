@@ -101,9 +101,11 @@ label#player-label {
   font-weight: bold;
 }
 
-picture#bot-shape,
-picture#player-shape {
-  padding: 10px;
+box#bot-shape,
+box#player-shape {
+  padding: 3px 0;
+  min-width: 40px;
+  min-height: 18px;
   border-radius: 50px;
   background: var(--main-color);
 }
@@ -119,3 +121,4 @@ label#win-indicator-label {
   font-size: 13px;
   font-weight: bold;
 }
+
