@@ -1,9 +1,11 @@
 use rand::{Rng, seq::SliceRandom};
 
+use crate::WIN_STATE;
+
 //===========================
 //
 //===========================
-#[derive(Clone, Copy)]
+#[derive(Debug, Clone, Copy)]
 pub struct Game {
     pub round: i8,
     pub now_playing: Players,
@@ -28,16 +30,16 @@ impl Game {
     //------------------------------
     //
     //------------------------------
-    pub fn play(&mut self, play: PlayParams) {
+    pub fn play(&mut self, play: PlayParams) -> bool {
         // It is player turn to play?
         if play.val != self.now_playing {
-            return;
+            return false;
         }
 
         // box must be empty
         let square = self.board[play.y as usize][play.x as usize];
         if square.is_some() {
-            return;
+            return false;
         }
 
         // player played this
@@ -51,29 +53,14 @@ impl Game {
 
         // did anyone win
         self.check_wins();
+        true
     }
 
     //------------------------------
     //
     //------------------------------
     fn check_wins(&mut self) {
-        #[rustfmt::skip]
-        let win_state = [
-            // Note: 1st val = y, 2nd val = x
-
-            ["00","01","02"], // Horizontal
-            ["10","11","12"], // Horizontal
-            ["20","21","22"], // Horizontal
-
-            ["00","10","20"], // Vertical
-            ["01","11","21"], // Vertical
-            ["02","12","22"], // Vertical
-
-            ["00","11","22"], // Diagonal
-            ["02","11","20"], // Diagonal
-        ];
-
-        //
+        let mut box_filled_count = 0;
         let mut player_1_win_rate: Vec<String> = vec![];
         let mut player_2_win_rate: Vec<String> = vec![];
 
@@ -88,19 +75,21 @@ impl Game {
                     continue;
                 }
 
+                //==
+                box_filled_count += 1;
+
                 //----------------------------
                 // Player one check
                 //----------------------------
                 if player.unwrap() == self.player_1 {
-                    if y == 0 {}
                     player_1_win_rate.push(format!("{y}{x}"));
 
                     // since it will aways be a square of equal size (optional)
-                    if y != (self.board.len() - 1) && x != (self.board.len() - 1) {
-                        continue;
-                    }
+                    // if y != (self.board.len() - 1) && x != (self.board.len() - 1) {
+                    //     continue;
+                    // }
 
-                    for state in win_state {
+                    for state in WIN_STATE {
                         let all_exist = state.iter().all(|val| {
                             // For each value in the required list, check if the target list contains it.
                             player_1_win_rate.contains(&val.to_string())
@@ -124,21 +113,26 @@ impl Game {
                     //     continue;
                     // }
 
-                    // for state in win_state {
-                    //     if state.join("-") == player_2_win_rate.join("-") {
-                    //         self.who_won = Some(self.player_2);
-                    // self.update_game_state();
-                    //     }
-                    // }
-                }
+                    for state in WIN_STATE {
+                        let all_exist = state.iter().all(|val| {
+                            // For each value in the required list, check if the target list contains it.
+                            player_2_win_rate.contains(&val.to_string())
+                        });
 
-                //----------------------------
-                // No one won, and all box are filled
-                //----------------------------
-                if y == (self.board.len() - 1) && x == (self.board.len() - 1) {
-                    self.update_game_state();
+                        if all_exist {
+                            self.who_won = Some(self.player_2);
+                            self.update_game_state();
+                        }
+                    }
                 }
             }
+        }
+
+        //----------------------------
+        // No one won, and all box are filled
+        //----------------------------
+        if box_filled_count == (self.board.len() * self.board.len()) {
+            self.update_game_state();
         }
     }
 
@@ -180,18 +174,10 @@ impl Default for Game {
         let mut posible_shape: [Players; 2] = [Players::X, Players::O];
         posible_shape.shuffle(&mut rng);
 
-        //
-        #[rustfmt::skip]
-        let board = [
-            [None,None,None],
-            [None,None,None],
-            [None,None,None],
-        ];
-
         Self {
-            board,
             round: 1,
             who_won: None,
+            board: [[None; 3]; 3], // 3x3 grid
             now_playing: posible_shape[x],
 
             //  player 1
