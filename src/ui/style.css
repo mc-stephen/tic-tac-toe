@@ -14,6 +14,31 @@ window {
 }
 
 /*====================*/
+/*  */
+/*====================*/
+box.alert{
+  border-radius: 10px;
+  background: #99999909;
+  padding: 8px 8px 8px 10px;
+}
+box.alert.win{
+  background: rgba(0, 128, 0, 0.300);
+}
+box.alert.lose{
+  background: rgba(255, 0, 0, 0.300);
+}
+label.win-indicator{
+  font-weight: bold;
+}
+button.continue-btn.win{
+  background: green;
+}
+button.continue-btn.lose{
+  background: red;
+}
+
+
+/*====================*/
 /* Grid cells */
 /*====================*/
 .single {

@@ -47,7 +47,7 @@ Adw.ApplicationWindow main_window {
     // Body
     // ===================================
     Gtk.Box {
-      spacing: 30;
+      spacing: 10;
       halign: center;
       valign: center;
       orientation: vertical;
@@ -55,6 +55,27 @@ Adw.ApplicationWindow main_window {
       css-classes: [
         "body",
       ];
+
+      Gtk.Box indicator_box{
+        spacing: 10;
+        visible: false;
+        halign: center;
+        width-request: 400;
+        height-request: 50;
+        css-classes: ["alert"];
+        
+        Gtk.Label indicator_label {
+          halign: start;
+          hexpand: true;
+          label: _("You lose");
+          css-classes: ["win-indicator"];
+        }
+
+        Gtk.Button continue_btn {
+          label: _("Continue");
+          css-classes: ["continue-btn"];
+        }
+      }
 
       Gtk.Box inner_body {
         spacing: 50;

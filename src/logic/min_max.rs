@@ -8,47 +8,60 @@ use crate::logic::game::{Game, Players};
 pub struct Bot {
     pub player: Players,
     pub bot_level: BotLevel,
-    pub game: Rc<RefCell<Game>>,
 }
 
 impl Bot {
     //==================================
     // Initialize new bot with dynamic data
     //==================================
-    pub fn new(game: Rc<RefCell<Game>>, player: Players, level: BotLevel) -> Bot {
+    pub fn new(player: &Players, level: BotLevel) -> Bot {
         Self {
-            game: game,
-            player: player,
             bot_level: level,
+            player: player.to_owned(),
         }
     }
 
     //====================================
     // Return the y and x box axis to click
     //====================================
-    pub fn compute(&self) -> [i32; 2] {
+    pub fn compute(&self, game: &Rc<RefCell<Game>>) -> [i32; 2] {
         let now_playing: Players = self.player;
 
         match self.bot_level {
-            BotLevel::Normal => self.easy_level(self.game.clone()),
-            BotLevel::Hard => self.normal_hard_level(now_playing, self.game.borrow().board.clone()),
+            BotLevel::Normal => self.easy_level(game),
+            BotLevel::Hard => self.normal_hard_level(now_playing, game.borrow().board.clone()),
         }
     }
 
     //====================================
     // Easy (Random Selector)
     //====================================
-    fn easy_level(&self, game: Rc<RefCell<Game>>) -> [i32; 2] {
+    fn easy_level(&self, game: &Rc<RefCell<Game>>) -> [i32; 2] {
         let mut rng = rand::rng();
         let y: i32 = rng.random_range(0..3) as i32;
         let x: i32 = rng.random_range(0..3) as i32;
 
-        if self.game.borrow().board[y as usize][x as usize].is_some() {
-            self.easy_level(game);
-        }
+        // if game.borrow().board[y as usize][x as usize].is_some() {
+        //     return self.easy_level(game);
+        // }
 
         [y, x]
+        // [0, 0]
     }
+
+    // fn easy_level(&self, game: Rc<RefCell<Game>>) -> [i32; 2] {
+    //     let mut rng = rand::rng();
+    //     let game_ref = game.borrow();
+
+    //     loop {
+    //         let y: i32 = rng.random_range(0..3);
+    //         let x: i32 = rng.random_range(0..3);
+
+    //         if game_ref.board[y as usize][x as usize].is_none() {
+    //             return [y, x];
+    //         }
+    //     }
+    // }
 
     //====================================
     // Normal / Hard Level Logic

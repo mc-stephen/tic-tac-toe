@@ -5,7 +5,7 @@ use crate::WIN_STATE;
 //===========================
 //
 //===========================
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct Game {
     pub round: i8,
     pub now_playing: Players,
@@ -30,9 +30,31 @@ impl Game {
     //------------------------------
     //
     //------------------------------
+    pub fn restart(&mut self) -> Game {
+        let game = Game::default();
+
+        self.round = game.round;
+        self.board = game.board;
+        //
+        self.now_playing = game.now_playing;
+
+        //  player 1
+        self.player_1_win_count = game.player_1_win_count;
+        self.player_1 = game.player_1;
+
+        // player 2
+        self.player_2_win_count = game.player_2_win_count;
+        self.player_2 = game.player_2;
+
+        game
+    }
+
+    //------------------------------
+    //
+    //------------------------------
     pub fn play(&mut self, play: PlayParams) -> bool {
         // It is player turn to play?
-        if play.val != self.now_playing {
+        if play.player != self.now_playing {
             return false;
         }
 
@@ -43,7 +65,7 @@ impl Game {
         }
 
         // player played this
-        self.board[play.y as usize][play.x as usize] = Some(play.val);
+        self.board[play.y as usize][play.x as usize] = Some(play.player);
 
         // update turn
         self.now_playing = match self.now_playing {
@@ -51,15 +73,13 @@ impl Game {
             Players::O => Players::X,
         };
 
-        // did anyone win
-        self.check_wins();
         true
     }
 
     //------------------------------
     //
     //------------------------------
-    fn check_wins(&mut self) {
+    pub fn check_wins(&mut self) -> Option<bool> {
         let mut box_filled_count = 0;
         let mut player_1_win_rate: Vec<String> = vec![];
         let mut player_2_win_rate: Vec<String> = vec![];
@@ -97,7 +117,8 @@ impl Game {
 
                         if all_exist {
                             self.who_won = Some(self.player_1);
-                            self.update_game_state();
+                            // self.update_game_state();
+                            return Some(true);
                         }
                     }
                 }
@@ -121,7 +142,8 @@ impl Game {
 
                         if all_exist {
                             self.who_won = Some(self.player_2);
-                            self.update_game_state();
+                            // self.update_game_state();
+                            return Some(true);
                         }
                     }
                 }
@@ -131,17 +153,23 @@ impl Game {
         //----------------------------
         // No one won, and all box are filled
         //----------------------------
+        // if box_filled_count == (self.board.len() * self.board.len()) {
+        //     self.update_game_state();
+        // }
+
         if box_filled_count == (self.board.len() * self.board.len()) {
-            self.update_game_state();
+            return Some(true);
         }
+
+        None
     }
 
     //------------------------------
     //
     //------------------------------
-    fn update_game_state(&mut self) {
+    pub fn update_game_state(&mut self) {
         self.round += 1;
-        self.board = [[None, None, None], [None, None, None], [None, None, None]];
+        self.board = [[None; 3]; 3]; // 3x3 grid
 
         // update score
         match self.who_won {
@@ -200,5 +228,5 @@ pub enum Players {
 pub struct PlayParams {
     pub x: i32,
     pub y: i32,
-    pub val: Players,
+    pub player: Players,
 }
